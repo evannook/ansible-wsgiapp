@@ -1,4 +1,6 @@
 ---
+- name: install redis server for session handling
+  apt: "name=redis-server state=latest"
 - name: check if the project directory exists
   stat: "path={{ wsgiapp_basedir }}"
   register: p
