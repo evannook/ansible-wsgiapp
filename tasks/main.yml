@@ -5,7 +5,7 @@
 
 - name: checkout source code via scm
   command: "{{ wsgiapp_scm }} clone {{ wsgiapp_repo }} {{ wsgiapp_basedir }}"
-  when: "p.stat.isdir is defined and p.stat.isdir"
+  when: "p.stat.isdir is not defined"
 
 - name: check if the venv directory exists
   stat: "path={{ wsgiapp_basedir }}/venv"
