@@ -1,0 +1,9 @@
+[uwsgi]
+chdir = {{ wsgiapp_basedir }}
+home  = {{ wsgiapp_basedir }}/venv
+wsgi-file = {{ wsgiapp_basedir }}/wsgi.wsgi
+processes = {{ cpu_count.stdout }}
+vacuum = true
+master = true
+socket = /run/uwsgi/{{ basename.stdout }}.sock
+chmod-socket = 644

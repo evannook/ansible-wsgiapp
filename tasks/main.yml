@@ -1,0 +1,51 @@
+---
+- name: check if the project directory exists
+  stat: "path={{ wsgiapp_basedir }}"
+  register: p
+
+- name: checkout source code via scm
+  command: "{{ wsgiapp_scm }} clone {{ wsgiapp_repo }} {{ wsgiapp_basedir }}"
+  when: "p.stat.isdir is defined and p.stat.isdir"
+
+- name: check if the venv directory exists
+  stat: "path={{ wsgiapp_basedir }}/venv"
+  register: v
+
+- name: create virtualenv under the project directory
+  command: "virtualenv -p python3 {{ wsgiapp_basedir }}/venv"
+  when: "v.stat.isdir is defined and v.stat.isdir"
+
+- name: check if the requirements.txt exists
+  stat: "path={{ wsgiapp_basedir }}/requirements.txt"
+  register: r
+
+- name: install project dependency packages
+  command: "{{ wsgiapp_basedir }}/venv/bin/pip install -r {{ wsgiapp_basedir }}/requirements.txt"
+  when: "r.stat.isreg is defined and r.stat.isreg"
+
+- name: install project
+  command: "{{ wsgiapp_basedir }}/venv/bin/pip install -e {{ wsgiapp_basedir }}"
+
+- name: fetch cpu count
+  shell: "cat /proc/cpuinfo | grep ^processor | wc -l"
+  register: cpu_count
+
+- name: get directory name of basedir
+  command: "basename {{ wsgiapp_basedir }}"
+  register: basename
+
+- name: install uwsgi configuration of the project
+  template:
+    src: "uwsgi.ini.j2"
+    dest: "/opt/uwsgi/etc/{{ basename.stdout }}.ini"
+
+- name: install nginx configuration of the project
+  template:
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/sites-available/{{ basename.stdout }}.conf"
+
+- name: activate nginx configuration of the project
+  file:
+    src: "/etc/nginx/sites-available/{{ basename.stdout }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ basename.stdout }}.conf"
+    state: "link"

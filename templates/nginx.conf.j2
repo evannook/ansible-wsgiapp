@@ -1,0 +1,15 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name {{ basename.stdout }};
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/run/uwsgi/{{ basename.stdout }}.sock;
+    }
+
+    location /static {
+        alias {{ wsgiapp_basedir }}/{{ basename.stdout }}/static;
+    }
+}
