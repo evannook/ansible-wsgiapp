@@ -14,3 +14,5 @@ galaxy_info:
     - debian
 dependencies:
   - evannook.python
+  - evannook.uwsgi
+  - evannook.nginx
