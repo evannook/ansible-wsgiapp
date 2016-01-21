@@ -34,6 +34,11 @@
   command: "basename {{ wsgiapp_basedir }}"
   register: basename
 
+- name: setup wsgi configuration of the project
+  template:
+    src: "wsgi.wsgi.j2"
+    dest: "{{ wsgiapp_basedir }}/wsgi.wsgi"
+
 - name: install uwsgi configuration of the project
   template:
     src: "uwsgi.ini.j2"
