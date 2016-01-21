@@ -13,7 +13,7 @@
 
 - name: create virtualenv under the project directory
   command: "virtualenv -p python3 {{ wsgiapp_basedir }}/venv"
-  when: "v.stat.isdir is defined and v.stat.isdir"
+  when: "v.stat.isdir is not defined"
 
 - name: check if the requirements.txt exists
   stat: "path={{ wsgiapp_basedir }}/requirements.txt"
@@ -21,7 +21,7 @@
 
 - name: install project dependency packages
   command: "{{ wsgiapp_basedir }}/venv/bin/pip install -r {{ wsgiapp_basedir }}/requirements.txt"
-  when: "r.stat.isreg is defined and r.stat.isreg"
+  when: "r.stat.isreg is defined"
 
 - name: install project
   command: "{{ wsgiapp_basedir }}/venv/bin/pip install -e {{ wsgiapp_basedir }}"
