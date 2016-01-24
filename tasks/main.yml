@@ -5,6 +5,8 @@
   stat: "path={{ wsgiapp_basedir }}"
   register: p
 
+- name: add github and bitbucket to ssh known hosts
+  script: "add_ssh_known_hosts.sh"
 - name: checkout source code via scm
   command: "{{ wsgiapp_scm }} clone {{ wsgiapp_repo }} {{ wsgiapp_basedir }}"
   when: "p.stat.isdir is not defined"
