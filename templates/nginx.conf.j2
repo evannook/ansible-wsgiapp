@@ -2,14 +2,14 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name {{ basename.stdout }};
+    server_name {{ wsgiapp_domain_name }};
 
     location / {
         include uwsgi_params;
-        uwsgi_pass unix:/run/uwsgi/{{ basename.stdout }}.sock;
+        uwsgi_pass unix:/run/uwsgi/{{ wsgiapp_domain_name }}.sock;
     }
 
     location /static {
-        alias {{ wsgiapp_basedir }}/{{ basename.stdout }}/static;
+        alias {{ wsgiapp_basedir }}/{{ wsgiapp_project_name }}/static;
     }
 }

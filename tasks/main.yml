@@ -34,10 +34,6 @@
   shell: "cat /proc/cpuinfo | grep ^processor | wc -l"
   register: cpu_count
 
-- name: get directory name of basedir
-  command: "basename {{ wsgiapp_basedir }}"
-  register: basename
-
 - name: setup wsgi configuration of the project
   template:
     src: "wsgi.wsgi.j2"
@@ -46,15 +42,15 @@
 - name: install uwsgi configuration of the project
   template:
     src: "uwsgi.ini.j2"
-    dest: "/opt/uwsgi/etc/{{ basename.stdout }}.ini"
+    dest: "/opt/uwsgi/etc/{{ wsgiapp_domain_name }}.ini"
 
 - name: install nginx configuration of the project
   template:
     src: "nginx.conf.j2"
-    dest: "/etc/nginx/sites-available/{{ basename.stdout }}.conf"
+    dest: "/etc/nginx/sites-available/{{ wsgiapp_domain_name }}.conf"
 
 - name: activate nginx configuration of the project
   file:
-    src: "/etc/nginx/sites-available/{{ basename.stdout }}.conf"
-    dest: "/etc/nginx/sites-enabled/{{ basename.stdout }}.conf"
+    src: "/etc/nginx/sites-available/{{ wsgiapp_domain_name }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ wsgiapp_domain_name }}.conf"
     state: "link"
