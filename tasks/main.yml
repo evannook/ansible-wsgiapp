@@ -1,15 +1,21 @@
 ---
 - name: install redis server for session handling
   apt: "name=redis-server state=latest"
+- name: get root of base dir
+  shell: "dirname {{ wsgiapp_basedir }}"
+  register: root_dir
+- name: create root of base dir
+  file: "path={{ root_dir.stdout }} state=directory mode=0755"
+
 - name: check if the project directory exists
   stat: "path={{ wsgiapp_basedir }}"
   register: p
-
-- name: add github and bitbucket to ssh known hosts
-  script: "add_ssh_known_hosts.sh"
 - name: delete dest dir if exists
   command: "rm -rf {{ wsgiapp_basedir }}"
   when: "p.stat.isdir is defined and p.stat.isdir"
+
+- name: add github and bitbucket to ssh known hosts
+  script: "add_ssh_known_hosts.sh"
 - name: checkout source code via scm
   command: "{{ wsgiapp_scm }} clone {{ wsgiapp_repo }} {{ wsgiapp_basedir }}"
 
