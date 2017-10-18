@@ -1,18 +1,18 @@
 galaxy_info:
-  author: Evan Nook
+  author: William Wu
   description: Setup WSGI app
-  company: InnoNook
+  company: PyLabs
   license: MIT
   min_ansible_version: 2.0
   platforms:
   - name: Debian
     versions:
-    - jessie
+    - stretch
   galaxy_tags:
     - python
     - wsgi
     - debian
 dependencies:
-  - evannook.python
-  - evannook.uwsgi
-  - evannook.nginx
+  - pylabs.python
+  - pylabs.uwsgi
+  - pylabs.nginx
