@@ -25,7 +25,7 @@
     register: v
   
   - name: create virtualenv under the project directory
-    command: "virtualenv -p python3 {{ wsgiapp_basedir }}/venv"
+    command: "python3 -m venv {{ wsgiapp_basedir }}/venv"
     when: "v.stat.isdir is not defined"
   
   - name: check if the requirements.txt exists
