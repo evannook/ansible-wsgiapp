@@ -1,5 +1,10 @@
 ---
 - block:
+  - name: install scm packages
+    apt: "name={{ item }}  state=latest"
+    with_items:
+      - mercurial
+      - git
   - name: install redis server for session handling
     apt: "name=redis-server state=latest"
   - name: get root of base dir
