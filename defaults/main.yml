@@ -1,2 +1,3 @@
 ---
-# defaults file for wsgiapp
+pyramid_wsgiapp_basedir: "/srv/www/{{ pyramid_wsgiapp_domain_name }}"
+pyramid_wsgiapp_scm: "git"
