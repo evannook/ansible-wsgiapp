@@ -1,6 +1,6 @@
 [uwsgi]
 chdir = {{ pyramid_wsgiapp_basedir }}
-home  = {{ pyramid_wsgiapp_basedir }}/venv
+home  = {{ pyramid_wsgiapp_basedir }}/.venv
 wsgi-file = {{ pyramid_wsgiapp_basedir }}/wsgi.wsgi
 processes = {{ cpu_count.stdout }}
 vacuum = true

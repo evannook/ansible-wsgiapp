@@ -17,11 +17,17 @@
   - name: checkout source code via scm
     command: "{{ pyramid_wsgiapp_scm }} clone {{ pyramid_wsgiapp_repo }} {{ pyramid_wsgiapp_basedir }}"
   - name: create virtualenv under the project directory
-    command: "python3 -m venv {{ pyramid_wsgiapp_basedir }}/venv"
+    command: "python3 -m venv {{ pyramid_wsgiapp_basedir }}/.venv"
+  - name: install pipenv package
+    command: "{{ pyramid_wsgiapp_basedir }}/.venv/bin/pip install pipenv"
   - name: install project dependency packages
-    command: "{{ pyramid_wsgiapp_basedir }}/venv/bin/pip install -r {{ pyramid_wsgiapp_basedir }}/requirements.txt"
+    command: "{{ pyramid_wsgiapp_basedir }}/.venv/bin/pipenv sync"
+    args:
+      chdir: "{{ pyramid_wsgiapp_basedir }}"
   - name: install project
-    command: "{{ pyramid_wsgiapp_basedir }}/venv/bin/pip install -e {{ pyramid_wsgiapp_basedir }}"
+    command: "{{ pyramid_wsgiapp_basedir }}/.venv/bin/pip install -e ."
+    args:
+      chdir: "{{ pyramid_wsgiapp_basedir }}"
   - name: fetch cpu count
     shell: "cat /proc/cpuinfo | grep ^processor | wc -l"
     register: cpu_count
