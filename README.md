@@ -27,7 +27,7 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-    - role: pylabs.pyramid-wsgiapp
+    - role: pylabs.pyramid_wsgiapp
   vars:
     pyramid_wsgiapp_project_name: myproject
     pyramid_wsgiapp_domain_name: www.example.com
