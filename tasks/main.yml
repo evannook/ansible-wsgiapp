@@ -6,36 +6,36 @@
       - mercurial
       - git
   - name: get root of base dir
-    shell: "dirname {{ pyramid_wsgiapp_basedir }}"
+    shell: "dirname {{ python_wsgiapp_basedir }}"
     register: root_dir
   - name: create root of base dir
     file: "path={{ root_dir.stdout }} state=directory mode=0755"
   - name: add github and bitbucket to ssh known hosts
     script: "add_ssh_known_hosts.sh"
   - name: checkout source code via scm
-    command: "{{ pyramid_wsgiapp_scm }} clone {{ pyramid_wsgiapp_repo }} {{ pyramid_wsgiapp_basedir }}"
+    command: "{{ python_wsgiapp_scm }} clone {{ python_wsgiapp_repo }} {{ python_wsgiapp_basedir }}"
   - name: create virtualenv under the project directory
-    command: "python3 -m venv {{ pyramid_wsgiapp_basedir }}/.venv"
+    command: "python3 -m venv {{ python_wsgiapp_basedir }}/.venv"
   - name: install pipenv package
-    command: "{{ pyramid_wsgiapp_basedir }}/.venv/bin/pip install pipenv"
+    command: "{{ python_wsgiapp_basedir }}/.venv/bin/pip install pipenv"
   - name: install project dependency packages
-    command: "{{ pyramid_wsgiapp_basedir }}/.venv/bin/pipenv sync"
+    command: "{{ python_wsgiapp_basedir }}/.venv/bin/pipenv sync"
     args:
-      chdir: "{{ pyramid_wsgiapp_basedir }}"
+      chdir: "{{ python_wsgiapp_basedir }}"
   - name: install project
-    command: "{{ pyramid_wsgiapp_basedir }}/.venv/bin/pip install -e ."
+    command: "{{ python_wsgiapp_basedir }}/.venv/bin/pip install -e ."
     args:
-      chdir: "{{ pyramid_wsgiapp_basedir }}"
+      chdir: "{{ python_wsgiapp_basedir }}"
   - name: fetch cpu count
     shell: "cat /proc/cpuinfo | grep ^processor | wc -l"
     register: cpu_count
   - name: setup wsgi configuration of the project
     template:
       src: "wsgi.wsgi.j2"
-      dest: "{{ pyramid_wsgiapp_basedir }}/wsgi.wsgi"
+      dest: "{{ python_wsgiapp_basedir }}/wsgi.wsgi"
   - name: install uwsgi configuration of the project
     template:
       src: "uwsgi.ini.j2"
-      dest: "/opt/uwsgi/etc/{{ pyramid_wsgiapp_domain_name }}.ini" 
+      dest: "/opt/uwsgi/etc/{{ python_wsgiapp_domain_name }}.ini" 
   tags:
     - python_wsgiapp

@@ -2,14 +2,14 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name {{ pyramid_wsgiapp_domain_name }};
+    server_name {{ python_wsgiapp_domain_name }};
 
     location / {
         include uwsgi_params;
-        uwsgi_pass unix:/run/uwsgi/{{ pyramid_wsgiapp_domain_name }}.sock;
+        uwsgi_pass unix:/run/uwsgi/{{ python_wsgiapp_domain_name }}.sock;
     }
 
     location /static {
-        alias {{ pyramid_wsgiapp_basedir }}/{{ pyramid_wsgiapp_project_name }}/static;
+        alias {{ python_wsgiapp_basedir }}/{{ python_wsgiapp_project_name }}/static;
     }
 }
