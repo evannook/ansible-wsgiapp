@@ -30,9 +30,13 @@
     shell: "cat /proc/cpuinfo | grep ^processor | wc -l"
     register: cpu_count
   - name: setup wsgi configuration of the project
-    template:
-      src: "wsgi.wsgi.j2"
-      dest: "{{ python_wsgiapp_basedir }}/wsgi.wsgi"
+    copy:
+      remote_src: "yes"
+      src: "{{ python_wsgiapp_basedir }}/wsgi.py.sample"
+      dest: "{{ python_wsgiapp_basedir }}/wsgi.py"
+      owner: "root"
+      group: "root"
+      mode: "0644"
   - name: install uwsgi configuration of the project
     template:
       src: "uwsgi.ini.j2"
