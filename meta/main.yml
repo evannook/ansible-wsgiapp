@@ -1,5 +1,5 @@
 galaxy_info:
-  role_name: python-wsgiapp
+  role_name: python_wsgiapp
   author: William Wu
   description: Setup Pyramid WSGI app
   company: PyLabs

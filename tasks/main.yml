@@ -38,4 +38,4 @@
       src: "uwsgi.ini.j2"
       dest: "/opt/uwsgi/etc/{{ pyramid_wsgiapp_domain_name }}.ini" 
   tags:
-    - pyramid-wsgiapp
+    - python_wsgiapp
