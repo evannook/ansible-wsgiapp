@@ -1,10 +1,11 @@
 ---
 - block:
   - name: install scm packages
-    apt: "name={{ item }}  state=latest"
-    with_items:
-      - mercurial
-      - git
+    apt: "name={{ packages }}  state=latest"
+    vars:
+      packages:
+        - mercurial
+        - git
   - name: get root of base dir
     shell: "dirname {{ python_wsgiapp_basedir }}"
     register: root_dir
