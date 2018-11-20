@@ -7,6 +7,7 @@ Role Variables
 --------------
 
 ```yaml
+python_wsgiapp_web_base_dir: YOUR_WEB_BASE_DIR (default: /srv/www)
 python_wsgiapp_vars:
   - domain_name: YOUR_PYTHON_WSGI_APP_DOMAIN_NAME
     base_dir: YOUR_PYTHON_WSGI_APP_BASE_DIR

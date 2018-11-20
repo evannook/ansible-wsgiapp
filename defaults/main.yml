@@ -1,0 +1,2 @@
+---
+python_wsgiapp_web_base_dir: "/srv/www"
