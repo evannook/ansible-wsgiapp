@@ -7,6 +7,14 @@
         - mercurial
         - git
 
+  - name: create web root dir
+    file:
+      path: "{{ python_wsgiapp_web_base_dir }}"
+      state: "directory"
+      mode: "0711"
+      owner: "root"
+      group: "root"
+
   - name: get root of base dir
     shell: "dirname {{ item.base_dir }}"
     register: base_dirs
