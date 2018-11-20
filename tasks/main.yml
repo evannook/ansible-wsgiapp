@@ -72,5 +72,12 @@
       src: "uwsgi.ini.j2"
       dest: "/opt/uwsgi/etc/{{ item.domain_name }}.ini" 
     loop: "{{ python_wsgiapp_vars }}"
+
+  rescue:
+  - name: remove web base dir if exists
+    file:
+      path: "{{ python_wsgiapp_web_base_dir }}"
+      state: "absent"
+
   tags:
     - python_wsgiapp
