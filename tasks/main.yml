@@ -29,7 +29,8 @@
 
   - name: checkout source code via scm
     command: "{{ item.scm }} clone {{ item.repo_url }} {{ item.base_dir }}"
-    when: "not item.base_dir|exists"
+    args:
+      creates: "{{ item.base_dir }}"
     loop: "{{ python_wsgiapp_vars }}"
 
   - name: create virtualenv under the project directory
