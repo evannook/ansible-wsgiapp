@@ -1,9 +1,9 @@
 [uwsgi]
-chdir = {{ python_wsgiapp_basedir }}
-home  = {{ python_wsgiapp_basedir }}/.venv
-wsgi-file = {{ python_wsgiapp_basedir }}/wsgi.wsgi
+chdir = {{ item.base_dir }}
+home  = {{ item.base_dir }}/.venv
+wsgi-file = {{ item.base_dir }}/wsgi.wsgi
 processes = {{ cpu_count.stdout }}
 vacuum = true
 master = true
-socket = /run/uwsgi/{{ python_wsgiapp_domain_name }}.sock
+socket = /run/uwsgi/{{ item.domain_name }}.sock
 chmod-socket = 644

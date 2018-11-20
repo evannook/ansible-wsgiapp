@@ -7,18 +7,18 @@ Role Variables
 --------------
 
 ```yaml
-python_wsgiapp_project_name: YOUR_PYTHON_WSGI_APP_PROJECT_NAME
-python_wsgiapp_domain_name: YOUR_PYTHON_WSGI_APP_DOMAIN_NAME
-python_wsgiapp_basedir: YOUR_PYTHON_WSGI_APP_BASE_DIR (default: /srv/www/{{ python_wsgiapp_domain_name }})
-python_wsgiapp_scm: YOUR_SCM_TOOLS (git or hg) (default: git)
-python_wsgiapp_repo: REPO_PATH
+python_wsgiapp_vars:
+  - project_name: YOUR_PYTHON_WSGI_APP_PROJECT_NAME
+    domain_name: YOUR_PYTHON_WSGI_APP_DOMAIN_NAME
+    base_dir: YOUR_PYTHON_WSGI_APP_BASE_DIR
+    scm: YOUR_SCM_TOOLS (git or hg)
+    repo_url: YOUR_REPO_URL
 ```
 
 Dependencies
 ------------
 
 - pylabs.python3
-- pylabs.nginx
 - pylabs.uwsgi
 
 Example Playbook
@@ -29,11 +29,17 @@ Example Playbook
   roles:
     - role: pylabs.python_wsgiapp
   vars:
-    python_wsgiapp_project_name: myproject
-    python_wsgiapp_domain_name: www.example.com
-    python_wsgiapp_basedir: /srv/www/myproject
-    python_wsgiapp_scm: git
-    python_wsgiapp_repo: https://github.com/pylabs/test_project
+    python_wsgiapp_vars:
+      - project_name: myproject
+        domain_name: www.example.com
+        base_dir: /srv/www/myproject
+        scm: git
+        repo_url: https://github.com/pylabs/myproject
+      - project_name: another_project
+        domain_name: www2.example.com
+        base_dir: /srv/www/another_project
+        scm: git
+        repo_url: https://github.com/pylabs/another_project
 ```
 
 License

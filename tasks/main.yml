@@ -6,41 +6,62 @@
       packages:
         - mercurial
         - git
+
   - name: get root of base dir
-    shell: "dirname {{ python_wsgiapp_basedir }}"
-    register: root_dir
+    shell: "dirname {{ item.base_dir }}"
+    register: base_dirs
+    loop: "{{ python_wsgiapp_vars }}"
+
   - name: create root of base dir
-    file: "path={{ root_dir.stdout }} state=directory mode=0755"
+    file: "path={{ item.stdout }} state=directory mode=0755"
+    loop: "{{ base_dirs.results }}"
+
   - name: add github and bitbucket to ssh known hosts
     script: "add_ssh_known_hosts.sh"
+
   - name: checkout source code via scm
-    command: "{{ python_wsgiapp_scm }} clone {{ python_wsgiapp_repo }} {{ python_wsgiapp_basedir }}"
+    command: "{{ item.scm }} clone {{ item.repo_url }} {{ item.base_dir }}"
+    when: "not item.base_dir|exists"
+    loop: "{{ python_wsgiapp_vars }}"
+
   - name: create virtualenv under the project directory
-    command: "python3 -m venv {{ python_wsgiapp_basedir }}/.venv"
+    command: "python3 -m venv {{ item.base_dir }}/.venv"
+    loop: "{{ python_wsgiapp_vars }}"
+
   - name: install pipenv package
-    command: "{{ python_wsgiapp_basedir }}/.venv/bin/pip install pipenv"
+    command: "{{ item.base_dir }}/.venv/bin/pip install pipenv"
+    loop: "{{ python_wsgiapp_vars }}"
+
   - name: install project dependency packages
-    command: "{{ python_wsgiapp_basedir }}/.venv/bin/pipenv sync"
+    command: "{{ item.base_dir }}/.venv/bin/pipenv sync"
     args:
-      chdir: "{{ python_wsgiapp_basedir }}"
+      chdir: "{{ item.base_dir }}"
+    loop: "{{ python_wsgiapp_vars }}"
+
   - name: install project
-    command: "{{ python_wsgiapp_basedir }}/.venv/bin/pip install -e ."
+    command: "{{ item.base_dir }}/.venv/bin/pip install -e ."
     args:
-      chdir: "{{ python_wsgiapp_basedir }}"
+      chdir: "{{ item.base_dir }}"
+    loop: "{{ python_wsgiapp_vars }}"
+
   - name: fetch cpu count
     shell: "cat /proc/cpuinfo | grep ^processor | wc -l"
     register: cpu_count
+
   - name: setup wsgi configuration of the project
     copy:
       remote_src: "yes"
-      src: "{{ python_wsgiapp_basedir }}/wsgi.py.sample"
-      dest: "{{ python_wsgiapp_basedir }}/wsgi.py"
+      src: "{{ item.base_dir }}/wsgi.py.sample"
+      dest: "{{ item.base_dir }}/wsgi.py"
       owner: "root"
       group: "root"
       mode: "0644"
+    loop: "{{ python_wsgiapp_vars }}"
+
   - name: install uwsgi configuration of the project
     template:
       src: "uwsgi.ini.j2"
-      dest: "/opt/uwsgi/etc/{{ python_wsgiapp_domain_name }}.ini" 
+      dest: "/opt/uwsgi/etc/{{ item.domain_name }}.ini" 
+    loop: "{{ python_wsgiapp_vars }}"
   tags:
     - python_wsgiapp

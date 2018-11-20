@@ -1,3 +1,0 @@
----
-python_wsgiapp_basedir: "/srv/www/{{ python_wsgiapp_domain_name }}"
-python_wsgiapp_scm: "git"
