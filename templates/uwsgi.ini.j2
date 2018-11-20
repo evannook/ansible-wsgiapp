@@ -1,7 +1,7 @@
 [uwsgi]
 chdir = {{ item.base_dir }}
 home  = {{ item.base_dir }}/.venv
-wsgi-file = {{ item.base_dir }}/wsgi.wsgi
+wsgi-file = {{ item.base_dir }}/wsgi.py
 processes = {{ cpu_count.stdout }}
 vacuum = true
 master = true
