@@ -11,7 +11,7 @@ python_wsgiapp_web_base_dir: YOUR_WEB_BASE_DIR (default: /srv/www)
 python_wsgiapp_vars:
   - domain_name: YOUR_PYTHON_WSGI_APP_DOMAIN_NAME
     base_dir: YOUR_PYTHON_WSGI_APP_BASE_DIR
-    clone_cmd: CLONE_REPO_COMMAND
+    scm: YOUR_SCM_TOOLS (git or hg)
     repo_url: YOUR_REPO_URL
 ```
 
@@ -32,10 +32,12 @@ Example Playbook
     python_wsgiapp_vars:
       - domain_name: www.example.com
         base_dir: /srv/www/myproject
-        clone_cmd: git clone https://www.example.com/example/example.git
+        scm: git
+        repo_url: https://github.com/pylabs/myproject
       - domain_name: www2.example.com
         base_dir: /srv/www/another_project
-        clone_cmd: git clone git@www.example.com:example/example.git
+        scm: git
+        repo_url: https://github.com/pylabs/another_project
 ```
 
 License

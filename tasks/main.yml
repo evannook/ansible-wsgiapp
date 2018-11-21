@@ -27,8 +27,8 @@
   - name: add github and bitbucket to ssh known hosts
     script: "add_ssh_known_hosts.sh"
 
-  - name: clone source code
-    shell: "{{ item.clone_cmd }}"
+  - name: checkout source code via scm
+    command: "{{ item.scm }} clone {{ item.repo_url }} {{ item.base_dir }}"
     args:
       creates: "{{ item.base_dir }}"
     loop: "{{ python_wsgiapp_vars }}"
