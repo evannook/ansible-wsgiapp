@@ -8,7 +8,7 @@ Role Variables
 
 ```yaml
 python_wsgiapps_web_base_dir: YOUR_WEB_BASE_DIR (default: /srv/www)
-python_wsgiapps_vars:
+python_wsgiapps:
   - domain_name: YOUR_PYTHON_WSGI_APP_DOMAIN_NAME
     base_dir: YOUR_PYTHON_WSGI_APP_BASE_DIR
     scm: YOUR_SCM_TOOLS (git or hg)
@@ -30,7 +30,7 @@ Example Playbook
   roles:
     - role: pylabs.python_wsgiapps
   vars:
-    python_wsgiapps_vars:
+    python_wsgiapps:
       - domain_name: www.example.com
         base_dir: /srv/www/myproject
         scm: git

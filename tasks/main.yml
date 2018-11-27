@@ -18,33 +18,33 @@
   - name: get root of base dirs
     shell: "dirname {{ item.base_dir }}"
     register: base_dirs
-    loop: "{{ python_wsgiapps_vars }}"
+    loop: "{{ python_wsgiapps }}"
 
   - name: checkout source code via scm
     command: "{{ item.scm }} clone {{ item.repo_url }} {{ item.base_dir }}"
     args:
       creates: "{{ item.base_dir }}"
-    loop: "{{ python_wsgiapps_vars }}"
+    loop: "{{ python_wsgiapps }}"
 
   - name: create virtualenv under the project directory
     command: "python3 -m venv {{ item.base_dir }}/.venv"
-    loop: "{{ python_wsgiapps_vars }}"
+    loop: "{{ python_wsgiapps }}"
 
   - name: install pipenv package
     command: "{{ item.base_dir }}/.venv/bin/pip install pipenv"
-    loop: "{{ python_wsgiapps_vars }}"
+    loop: "{{ python_wsgiapps }}"
 
   - name: install project dependency packages
     command: "{{ item.base_dir }}/.venv/bin/pipenv sync"
     args:
       chdir: "{{ item.base_dir }}"
-    loop: "{{ python_wsgiapps_vars }}"
+    loop: "{{ python_wsgiapps }}"
 
   - name: install project
     command: "{{ item.base_dir }}/.venv/bin/pip install -e ."
     args:
       chdir: "{{ item.base_dir }}"
-    loop: "{{ python_wsgiapps_vars }}"
+    loop: "{{ python_wsgiapps }}"
 
   - name: fetch cpu count
     shell: "cat /proc/cpuinfo | grep ^processor | wc -l"
@@ -58,13 +58,13 @@
       owner: "root"
       group: "root"
       mode: "0644"
-    loop: "{{ python_wsgiapps_vars }}"
+    loop: "{{ python_wsgiapps }}"
 
   - name: install uwsgi configuration of the project
     template:
       src: "uwsgi.ini.j2"
       dest: "/opt/uwsgi/etc/{{ item.domain_name }}.ini" 
-    loop: "{{ python_wsgiapps_vars }}"
+    loop: "{{ python_wsgiapps }}"
 
   rescue:
   - name: remove web base dir if exists
