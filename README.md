@@ -20,6 +20,7 @@ Dependencies
 
 - pylabs.python3
 - pylabs.uwsgi
+- pylabs.add_ssh_known_hosts
 
 Example Playbook
 ----------------
