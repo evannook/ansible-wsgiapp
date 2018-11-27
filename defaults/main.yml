@@ -1,2 +1,2 @@
 ---
-python_wsgiapp_web_base_dir: "/srv/www"
+python_wsgiapps_web_base_dir: "/srv/www"

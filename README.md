@@ -1,14 +1,14 @@
-python_wsgiapp
+python_wsgiapps
 ===============
 
-Pyramid WSGI app setup
+Install venv and packages per wsgi app
 
 Role Variables
 --------------
 
 ```yaml
-python_wsgiapp_web_base_dir: YOUR_WEB_BASE_DIR (default: /srv/www)
-python_wsgiapp_vars:
+python_wsgiapps_web_base_dir: YOUR_WEB_BASE_DIR (default: /srv/www)
+python_wsgiapps_vars:
   - domain_name: YOUR_PYTHON_WSGI_APP_DOMAIN_NAME
     base_dir: YOUR_PYTHON_WSGI_APP_BASE_DIR
     scm: YOUR_SCM_TOOLS (git or hg)
@@ -27,9 +27,9 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-    - role: pylabs.python_wsgiapp
+    - role: pylabs.python_wsgiapps
   vars:
-    python_wsgiapp_vars:
+    python_wsgiapps_vars:
       - domain_name: www.example.com
         base_dir: /srv/www/myproject
         scm: git

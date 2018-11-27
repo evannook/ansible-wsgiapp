@@ -1,7 +1,7 @@
 galaxy_info:
-  role_name: python_wsgiapp
+  role_name: python_wsgiapps
   author: William Wu
-  description: Setup Pyramid WSGI app
+  description: Install venv and packages per wsgi app
   company: PyLabs
   license: MIT
   min_ansible_version: 2.0
