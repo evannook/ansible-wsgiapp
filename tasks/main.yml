@@ -15,14 +15,10 @@
       owner: "root"
       group: "root"
 
-  - name: get root of base dir
+  - name: get root of base dirs
     shell: "dirname {{ item.base_dir }}"
     register: base_dirs
     loop: "{{ python_wsgiapps_vars }}"
-
-  - name: create root of base dir
-    file: "path={{ item.stdout }} state=directory mode=0755"
-    loop: "{{ base_dirs.results }}"
 
   - name: checkout source code via scm
     command: "{{ item.scm }} clone {{ item.repo_url }} {{ item.base_dir }}"
