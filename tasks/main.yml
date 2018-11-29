@@ -71,6 +71,9 @@
     file:
       path: "{{ python_wsgiapps_web_base_dir }}"
       state: "absent"
+  - name: error captured
+    fail:
+      msg: "Huston we have a problem."
 
   tags:
     - python_wsgiapps
