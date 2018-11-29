@@ -66,6 +66,11 @@
       dest: "/opt/uwsgi/etc/{{ item.domain_name }}.ini" 
     loop: "{{ python_wsgiapps }}"
 
+  - name: restart uwsgi
+    systemd:
+      name: uwsgi
+      state: restarted
+
   rescue:
   - name: remove web base dir if exists
     file:
