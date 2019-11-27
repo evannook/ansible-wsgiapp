@@ -4,7 +4,6 @@
     apt: "name={{ packages }} state=latest"
     vars:
       packages:
-        - mercurial
         - git
 
   - name: create web root dir
@@ -30,18 +29,12 @@
     command: "python3 -m venv {{ item.base_dir }}/.venv"
     loop: "{{ python_wsgiapps }}"
 
-  - name: install pipenv package
-    command: "{{ item.base_dir }}/.venv/bin/pip install pipenv"
+  - name: install poetry package
+    command: "{{ item.base_dir }}/.venv/bin/pip install poetry"
     loop: "{{ python_wsgiapps }}"
 
   - name: install project dependency packages
-    command: "{{ item.base_dir }}/.venv/bin/pipenv sync"
-    args:
-      chdir: "{{ item.base_dir }}"
-    loop: "{{ python_wsgiapps }}"
-
-  - name: install project
-    command: "{{ item.base_dir }}/.venv/bin/pip install -e ."
+    command: "{{ item.base_dir }}/.venv/bin/poetry install"
     args:
       chdir: "{{ item.base_dir }}"
     loop: "{{ python_wsgiapps }}"
