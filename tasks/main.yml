@@ -34,7 +34,7 @@
     loop: "{{ python_wsgiapps }}"
 
   - name: install project dependency packages
-    command: "{{ item.base_dir }}/.venv/bin/poetry install"
+    command: "{{ item.base_dir }}/.venv/bin/poetry install --no-dev"
     args:
       chdir: "{{ item.base_dir }}"
     loop: "{{ python_wsgiapps }}"
