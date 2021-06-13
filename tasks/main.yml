@@ -1,13 +1,13 @@
 ---
 - block:
   - name: install scm packages
-    apt: "name={{ packages }} state=latest"
+    ansible.builtin.apt: "name={{ packages }} state=latest"
     vars:
       packages:
         - git
 
   - name: create web root dir
-    file:
+    ansible.builtin.file:
       path: "{{ python_wsgiapps_web_base_dir }}"
       state: "directory"
       mode: "0711"
@@ -15,36 +15,36 @@
       group: "root"
 
   - name: get root of base dirs
-    shell: "dirname {{ item.base_dir }}"
+    ansible.builtin.shell: "dirname {{ item.base_dir }}"
     register: base_dirs
     loop: "{{ python_wsgiapps }}"
 
   - name: checkout source code via scm
-    command: "{{ item.scm }} clone {{ item.repo_url }} {{ item.base_dir }}"
+    ansible.builtin.command: "{{ item.scm }} clone {{ item.repo_url }} {{ item.base_dir }}"
     args:
       creates: "{{ item.base_dir }}"
     loop: "{{ python_wsgiapps }}"
 
   - name: create virtualenv under the project directory
-    command: "python3 -m venv {{ item.base_dir }}/.venv"
+    ansible.builtin.command: "python3 -m venv {{ item.base_dir }}/.venv"
     loop: "{{ python_wsgiapps }}"
 
   - name: install poetry package
-    command: "{{ item.base_dir }}/.venv/bin/pip install poetry"
+    ansible.builtin.command: "{{ item.base_dir }}/.venv/bin/pip install poetry"
     loop: "{{ python_wsgiapps }}"
 
   - name: install project dependency packages
-    command: "{{ item.base_dir }}/.venv/bin/poetry install"
+    ansible.builtin.command: "{{ item.base_dir }}/.venv/bin/poetry install"
     args:
       chdir: "{{ item.base_dir }}"
     loop: "{{ python_wsgiapps }}"
 
   - name: fetch cpu count
-    shell: "cat /proc/cpuinfo | grep ^processor | wc -l"
+    ansible.builtin.shell: "cat /proc/cpuinfo | grep ^processor | wc -l"
     register: cpu_count
 
   - name: setup wsgi configuration of the project
-    copy:
+    ansible.builtin.copy:
       remote_src: "yes"
       src: "{{ item.base_dir }}/wsgi.py.sample"
       dest: "{{ item.base_dir }}/wsgi.py"
@@ -54,23 +54,23 @@
     loop: "{{ python_wsgiapps }}"
 
   - name: install uwsgi configuration of the project
-    template:
+    ansible.builtin.template:
       src: "uwsgi.ini.j2"
       dest: "/opt/uwsgi/etc/{{ item.domain_name }}.ini" 
     loop: "{{ python_wsgiapps }}"
 
   - name: restart uwsgi
-    systemd:
+    ansible.builtin.systemd:
       name: uwsgi
       state: restarted
 
   rescue:
   - name: remove web base dir if exists
-    file:
+    ansible.builtin.file:
       path: "{{ python_wsgiapps_web_base_dir }}"
       state: "absent"
   - name: error captured
-    fail:
+    ansible.builtin.fail:
       msg: "Huston we have a problem."
 
   tags:
