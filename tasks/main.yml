@@ -34,7 +34,7 @@
     loop: "{{ python_wsgiapps }}"
 
   - name: install project dependency packages
-    ansible.builtin.command: "{{ item.base_dir }}/.venv/bin/poetry install"
+    ansible.builtin.command: "{{ item.base_dir }}/.venv/bin/poetry install --no-dev"
     args:
       chdir: "{{ item.base_dir }}"
     loop: "{{ python_wsgiapps }}"
